@@ -1,0 +1,47 @@
+name: Build Mac development app
+on:
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: mac-development-build
+  cancel-in-progress: false
+jobs:
+  build:
+    name: Test and package on macOS
+    strategy:
+      fail-fast: false
+      matrix:
+        include:
+          - runner: macos-14
+            architecture: Apple-Silicon
+          - runner: macos-15-intel
+            architecture: Intel
+    runs-on: ${{ matrix.runner }}
+    timeout-minutes: 20
+    steps:
+      - name: Check out source
+        uses: actions/checkout@v4
+      - name: Extract project source
+        run: |
+          base64 -D -i source.zip.base64 -o source.zip
+          ditto -x -k source.zip .
+      - name: Show build tools and architecture
+        run: |
+          sw_vers
+          uname -m
+          swift --version
+      - name: Run tests and build app and disk image
+        run: bash scripts/build-mac.sh
+      - name: Archive app with executable permissions
+        run: ditto -c -k --sequesterRsrc --keepParent 'dist/Just Plug It In.app' 'dist/Just Plug It In.app.zip'
+      - name: Upload downloadable development files
+        uses: actions/upload-artifact@v4
+        with:
+          name: Just-Plug-It-In-${{ matrix.architecture }}-development
+          path: |
+            dist/Just Plug It In.app.zip
+            dist/Just Plug It In.dmg
+          if-no-files-found: error
+          retention-days: 7
+          compression-level: 0

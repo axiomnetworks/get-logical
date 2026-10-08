@@ -33,6 +33,8 @@ jobs:
           swift --version
       - name: Run tests and build app and disk image
         run: bash scripts/build-mac.sh
+      - name: Build register and validate AUv3 effect proving target
+        run: bash scripts/build-plugin.sh
       - name: Archive app with executable permissions
         run: ditto -c -k --sequesterRsrc --keepParent 'dist/Get Logical.app' 'dist/Get Logical.app.zip'
       - name: Upload downloadable development files
@@ -42,6 +44,8 @@ jobs:
           path: |
             dist/Get Logical.app.zip
             dist/Get Logical.dmg
+            dist/Get Logical Plugin.app.zip
+            dist/plugin-auval.log
           if-no-files-found: error
           retention-days: 7
           compression-level: 0

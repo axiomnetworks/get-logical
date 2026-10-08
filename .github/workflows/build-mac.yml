@@ -34,14 +34,14 @@ jobs:
       - name: Run tests and build app and disk image
         run: bash scripts/build-mac.sh
       - name: Archive app with executable permissions
-        run: ditto -c -k --sequesterRsrc --keepParent 'dist/Just Plug It In.app' 'dist/Just Plug It In.app.zip'
+        run: ditto -c -k --sequesterRsrc --keepParent 'dist/Get Logical.app' 'dist/Get Logical.app.zip'
       - name: Upload downloadable development files
         uses: actions/upload-artifact@v4
         with:
-          name: Just-Plug-It-In-${{ matrix.architecture }}-development
+          name: Get-Logical-${{ matrix.architecture }}-development
           path: |
-            dist/Just Plug It In.app.zip
-            dist/Just Plug It In.dmg
+            dist/Get Logical.app.zip
+            dist/Get Logical.dmg
           if-no-files-found: error
           retention-days: 7
           compression-level: 0

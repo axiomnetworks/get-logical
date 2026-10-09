@@ -48,6 +48,7 @@ jobs:
             dist/plugin-auval.log
             dist/package-check.log
             dist/host-install.log
+            dist/fx-auval-installed.log
           if-no-files-found: error
           retention-days: 7
           compression-level: 0

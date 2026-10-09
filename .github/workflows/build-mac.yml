@@ -34,7 +34,18 @@ jobs:
       - name: Run tests and build app and disk image
         run: bash scripts/build-mac.sh
       - name: Build register and validate AUv3 effect proving target
-        run: bash scripts/build-plugin.sh
+        run: |
+          mkdir -p dist
+          set -o pipefail
+          bash scripts/build-plugin.sh 2>&1 | tee dist/build-plugin.log
+      - name: Upload build log for diagnosis
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: build-log-${{ matrix.architecture }}
+          path: dist/build-plugin.log
+          if-no-files-found: ignore
+          retention-days: 3
       - name: Archive app with executable permissions
         run: ditto -c -k --sequesterRsrc --keepParent 'dist/Get Logical.app' 'dist/Get Logical.app.zip'
       - name: Upload downloadable development files

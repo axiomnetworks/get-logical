@@ -44,8 +44,10 @@ jobs:
           path: |
             dist/Get Logical.app.zip
             dist/Get Logical.dmg
-            dist/Get Logical Plugin.zip
+            dist/Get Logical Plugin.app.zip
             dist/plugin-auval.log
+            dist/package-check.log
+            dist/host-install.log
           if-no-files-found: error
           retention-days: 7
           compression-level: 0
